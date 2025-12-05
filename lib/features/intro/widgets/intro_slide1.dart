@@ -8,64 +8,149 @@ class IntroSlide1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Stack(
       children: [
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF0A0F24), Color(0xFF111A3A), Color(0xFF18234F)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              colors: [Color(0xFFF5F8FF), Color(0xFFEAF0FF)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ),
 
         Positioned(
-          top: 120,
+          top: -40,
           left: -40,
           child: Container(
             width: 260,
             height: 260,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0x442E5CFF),
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF6C8CFF).withValues(alpha: .25),
+                  const Color(0xFF6C8CFF).withValues(alpha: .08),
+                ],
+              ),
             ),
           ),
         ),
 
         Positioned(
-          bottom: 80,
+          top: 90,
           right: -30,
           child: Container(
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
+            width: 220,
+            height: 220,
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0x3340A0FF),
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF9BB7FF).withValues(alpha: .18),
+                  const Color(0xFF9BB7FF).withValues(alpha: .05),
+                ],
+              ),
             ),
           ),
         ),
 
-        Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+        Positioned(
+          bottom: -30,
+          left: -20,
+          child: Container(
+            width: 180,
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(80),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF6C8CFF).withValues(alpha: .20),
+                  const Color(0xFF6C8CFF).withValues(alpha: .05),
+                ],
               ),
-              const SizedBox(height: 12),
-              Text(
-                subtitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: .8),
+            ),
+          ),
+        ),
+
+        Positioned(
+          bottom: 50,
+          right: -20,
+          child: Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF4F6BFF).withValues(alpha: .15),
+                  const Color(0xFF4F6BFF).withValues(alpha: .05),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        Transform.translate(
+          offset: const Offset(0, -40),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: .9),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: .1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.auto_fix_high_rounded,
+                        color: Color(0xFF3D5AFE),
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          color: const Color(0xFF0F1A33),
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.6,
+                          height: 1.1,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: const Color(0xFF425073),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    height: 1.35,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

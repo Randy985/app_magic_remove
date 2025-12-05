@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:magic_remove/core/utils/image_saver.dart';
 import 'package:magic_remove/features/enhance/controllers/enhance_controller.dart';
+import 'package:magic_remove/core/widgets/lottie_assets.dart';
 
 class EnhancePage extends StatefulWidget {
   const EnhancePage({super.key});
@@ -35,10 +36,9 @@ class _EnhancePageState extends State<EnhancePage> {
   Future<void> process() async {
     if (imageFile == null) return;
 
-    if (InterstitialAdManager.showIfNeeded(imageFile != null)) return;
-
-    setState(() => loading = true);
-
+    setState(() {
+      loading = true;
+    });
     final bytes = await imageFile!.readAsBytes();
     final output = await controller.enhanceImage(bytes);
 
@@ -46,6 +46,8 @@ class _EnhancePageState extends State<EnhancePage> {
       resultImage = output;
       loading = false;
     });
+
+    InterstitialAdManager.showIfNeeded(true);
   }
 
   Future<void> saveImage() async {
@@ -114,13 +116,12 @@ class _EnhancePageState extends State<EnhancePage> {
           ],
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
           child: Column(
             children: [
-              // Select image
+              // Contenedor para seleccionar la imagen
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -173,18 +174,20 @@ class _EnhancePageState extends State<EnhancePage> {
 
               const SizedBox(height: 20),
 
-              // Process button
+              // Botón de procesar imagen
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed: loading ? null : process,
+                  onPressed: loading
+                      ? null
+                      : process, // Deshabilitar botón cuando 'loading' es true
                   icon: const Icon(
                     Icons.auto_fix_high_rounded,
                     color: Colors.white,
                   ),
                   label: loading
-                      ? const CircularProgressIndicator(color: Colors.white)
+                      ? const SizedBox() // No mostrar nada cuando está cargando
                       : const Text(
                           "Mejorar",
                           style: TextStyle(fontSize: 16, color: Colors.white),
@@ -200,7 +203,10 @@ class _EnhancePageState extends State<EnhancePage> {
 
               const SizedBox(height: 28),
 
-              // Result block
+              // Mostrar la animación Lottie de loading si está cargando
+              if (loading) const Center(child: LoadingAnimation()),
+
+              // Resultados procesados
               if (resultImage != null)
                 Container(
                   width: double.infinity,
@@ -256,7 +262,6 @@ class _EnhancePageState extends State<EnhancePage> {
           ),
         ),
       ),
-
       bottomNavigationBar: const BannerAdWidget(),
     );
   }

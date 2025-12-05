@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:magic_remove/core/utils/image_saver.dart';
 import 'package:magic_remove/features/face_cutout/controllers/face_cutout_controller.dart';
+import 'package:magic_remove/core/widgets/lottie_assets.dart';
 
 class FaceCutoutPage extends StatefulWidget {
   const FaceCutoutPage({super.key});
@@ -35,8 +36,6 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
   Future<void> process() async {
     if (imageFile == null) return;
 
-    if (InterstitialAdManager.showIfNeeded(imageFile != null)) return;
-
     setState(() => loading = true);
 
     final bytes = await imageFile!.readAsBytes();
@@ -46,6 +45,8 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
       resultImage = output;
       loading = false;
     });
+
+    InterstitialAdManager.showIfNeeded(true);
   }
 
   Future<void> saveImage() async {
@@ -67,7 +68,6 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
     if (decoded == null) return;
 
     final pngBytes = img.encodePng(decoded);
-
     final dir = await getTemporaryDirectory();
     final path = '${dir.path}/share_image.png';
 
@@ -116,7 +116,7 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
           child: Column(
             children: [
               Container(
@@ -174,9 +174,9 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: loading ? null : process,
-                  icon: Icon(Icons.face_rounded, color: Colors.white),
+                  icon: const Icon(Icons.face_rounded, color: Colors.white),
                   label: loading
-                      ? const CircularProgressIndicator(color: Colors.white)
+                      ? const SizedBox()
                       : const Text(
                           "Procesar",
                           style: TextStyle(fontSize: 16, color: Colors.white),
@@ -189,7 +189,11 @@ class _FaceCutoutPageState extends State<FaceCutoutPage> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 28),
+
+              if (loading) const Center(child: LoadingAnimation()),
+              // Mostrar la animación Lottie si está cargando
               if (resultImage != null)
                 Container(
                   width: double.infinity,

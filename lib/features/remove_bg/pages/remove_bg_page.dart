@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:magic_remove/core/utils/image_saver.dart';
 import 'package:magic_remove/features/remove_bg/controllers/remove_bg_controller.dart';
+import 'package:magic_remove/core/widgets/lottie_assets.dart';
 
 class RemoveBgPage extends StatefulWidget {
   const RemoveBgPage({super.key});
@@ -35,9 +36,9 @@ class _RemoveBgPageState extends State<RemoveBgPage> {
   Future<void> process() async {
     if (imageFile == null) return;
 
-    if (InterstitialAdManager.showIfNeeded(imageFile != null)) return;
-
-    setState(() => loading = true);
+    setState(() {
+      loading = true;
+    });
 
     final bytes = await imageFile!.readAsBytes();
     final output = await controller.removeBackground(bytes);
@@ -46,6 +47,8 @@ class _RemoveBgPageState extends State<RemoveBgPage> {
       resultImage = output;
       loading = false;
     });
+
+    InterstitialAdManager.showIfNeeded(true);
   }
 
   Future<void> saveImage() async {
@@ -114,10 +117,9 @@ class _RemoveBgPageState extends State<RemoveBgPage> {
           ],
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
           child: Column(
             children: [
               // Contenedor para seleccionar la imagen
@@ -179,12 +181,20 @@ class _RemoveBgPageState extends State<RemoveBgPage> {
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: loading ? null : process,
-                  icon: Icon(Icons.remove_circle_outline, color: Colors.white),
+                  icon: const Icon(
+                    Icons.auto_fix_high_rounded,
+                    color: Colors.white,
+                    size: 22,
+                  ),
                   label: loading
-                      ? const CircularProgressIndicator(color: Colors.white)
+                      ? const SizedBox()
                       : const Text(
-                          "Procesar",
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          "Eliminar fondo",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFE4F4F),
@@ -196,6 +206,8 @@ class _RemoveBgPageState extends State<RemoveBgPage> {
               ),
 
               const SizedBox(height: 28),
+
+              if (loading) const Center(child: LoadingAnimation()),
 
               // Resultados procesados
               if (resultImage != null)

@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:magic_remove/core/utils/image_saver.dart';
 import 'package:magic_remove/features/watermark/controllers/watermark_controller.dart';
+import 'package:magic_remove/core/widgets/lottie_assets.dart';
 
 class WatermarkPage extends StatefulWidget {
   const WatermarkPage({super.key});
@@ -35,8 +36,7 @@ class _WatermarkPageState extends State<WatermarkPage> {
   Future<void> process() async {
     if (imageFile == null) return;
 
-    if (InterstitialAdManager.showIfNeeded(imageFile != null)) return;
-
+    // Mostrar el loading mientras procesamos la imagen
     setState(() => loading = true);
 
     final bytes = await imageFile!.readAsBytes();
@@ -46,6 +46,9 @@ class _WatermarkPageState extends State<WatermarkPage> {
       resultImage = output;
       loading = false;
     });
+
+    // Mostrar el anuncio después de procesar la imagen
+    InterstitialAdManager.showIfNeeded(true);
   }
 
   Future<void> saveImage() async {
@@ -117,10 +120,10 @@ class _WatermarkPageState extends State<WatermarkPage> {
 
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
           child: Column(
             children: [
-              // Select image
+              // Contenedor para seleccionar la imagen
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -173,7 +176,6 @@ class _WatermarkPageState extends State<WatermarkPage> {
 
               const SizedBox(height: 20),
 
-              // Process button
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -181,7 +183,7 @@ class _WatermarkPageState extends State<WatermarkPage> {
                   onPressed: loading ? null : process,
                   icon: const Icon(Icons.opacity_rounded, color: Colors.white),
                   label: loading
-                      ? const CircularProgressIndicator(color: Colors.white)
+                      ? const SizedBox()
                       : const Text(
                           "Quitar marca",
                           style: TextStyle(fontSize: 16, color: Colors.white),
@@ -197,7 +199,8 @@ class _WatermarkPageState extends State<WatermarkPage> {
 
               const SizedBox(height: 28),
 
-              // Result block
+              if (loading) const Center(child: LoadingAnimation()),
+
               if (resultImage != null)
                 Container(
                   width: double.infinity,

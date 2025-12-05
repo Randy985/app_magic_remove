@@ -7,7 +7,7 @@ class HomeMenuGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final ratio = width < 360 ? 0.95 : 1.1;
+    final ratio = width < 360 ? 0.95 : 1.05;
 
     return GridView(
       shrinkWrap: true,
@@ -21,25 +21,29 @@ class HomeMenuGrid extends StatelessWidget {
       children: const [
         HomeMenuButton(
           icon: Icons.auto_fix_high_rounded,
-          label: "Eliminar Fondo",
+          title: "Eliminar Fondo",
+          subtitle: "Quitar fondo automático",
           route: "/remove-bg",
           color: Color(0xFF3D82F0),
         ),
         HomeMenuButton(
           icon: Icons.high_quality_rounded,
-          label: "Mejorar Imagen",
+          title: "Mejorar Imagen",
+          subtitle: "Aumentar calidad",
           route: "/enhance",
           color: Color(0xFF1FA47A),
         ),
         HomeMenuButton(
           icon: Icons.water_drop_rounded,
-          label: "Quitar Marca",
+          title: "Quitar Marca",
+          subtitle: "Eliminar watermark",
           route: "/watermark",
           color: Color(0xFFE67E22),
         ),
         HomeMenuButton(
           icon: Icons.face_rounded,
-          label: "Corte de Rostro",
+          title: "Corte de Rostro",
+          subtitle: "Recorte preciso",
           route: "/face-cutout",
           color: Color(0xFF42A5F5),
         ),
